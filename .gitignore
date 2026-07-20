@@ -1,0 +1,19 @@
+# Dependencias y compilados
+node_modules/
+dist/
+coverage/
+
+# Variables de entorno: NUNCA se versionan (solo los .env.example)
+.env
+.env.*
+!.env.example
+
+# Sistema operativo y editores
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+
+# Registros
+*.log
+npm-debug.log*
