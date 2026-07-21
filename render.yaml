@@ -1,0 +1,23 @@
+# Blueprint de Render para la API de LibreStock.
+# Render lee este archivo del repositorio: al conectar el repo como "Blueprint",
+# crea el servicio con esta configuración sin pasos manuales.
+services:
+  - type: web
+    name: librestock-api
+    runtime: node
+    plan: free
+    # El código de la API vive en el subdirectorio server/ del monorepo
+    rootDir: server
+    buildCommand: npm ci
+    startCommand: npm start
+    # Render consulta esta ruta para saber si el servicio está vivo
+    healthCheckPath: /api/health
+    envVars:
+      # La cadena de conexión de Atlas se pega a mano en el panel (dato sensible)
+      - key: MONGO_URI
+        sync: false
+      # Render genera un secreto fuerte y aleatorio: no hay que inventarlo ni versionarlo
+      - key: JWT_SECRET
+        generateValue: true
+      - key: NODE_VERSION
+        value: "20"
