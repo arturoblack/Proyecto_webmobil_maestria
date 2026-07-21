@@ -25,7 +25,9 @@ const clear = async () => {
 };
 
 const disconnect = async () => {
-  await mongoose.connection.dropDatabase();
+  // Se vacían las colecciones en vez de soltar la base: el usuario de aplicación de Atlas
+  // tiene permiso de lectura/escritura, pero no "dropDatabase" (eso exige rol de dbAdmin).
+  await clear();
   await mongoose.disconnect();
 };
 
