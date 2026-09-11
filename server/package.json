@@ -9,7 +9,10 @@
     "seed": "node seed.js",
     "test": "jest",
     "test:integration": "jest --config jest.integration.config.js",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "test:coverage": "jest --coverage --coverageReporters=lcov --coverageReporters=text-summary",
+    "test:integration:coverage": "jest --config jest.integration.config.js --coverage --coverageDirectory=coverage-integration --coverageReporters=lcov --coverageReporters=text-summary",
+    "coverage": "npm run test:coverage && npm run test:integration:coverage"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
