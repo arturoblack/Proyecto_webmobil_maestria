@@ -16,6 +16,8 @@ module.exports = async () => {
     replSet: { count: 1, storageEngine: "wiredTiger" },
   });
   process.env.MONGO_URI_TEST = replSet.getUri();
+  // La API firma y verifica tokens: sin secreto, toda ruta autenticada fallaría
+  process.env.JWT_SECRET = process.env.JWT_SECRET || "secreto-solo-para-pruebas";
   // Se guarda en el ámbito global para que el teardown pueda detenerlo
   globalThis.__MONGO_REPLSET__ = replSet;
 };
