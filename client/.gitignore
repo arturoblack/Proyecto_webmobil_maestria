@@ -8,3 +8,6 @@ cypress/videos/
 cypress/screenshots/
 cypress/downloads/
 cypress.env.json
+
+# Reportes de cobertura de Vitest
+coverage/
