@@ -1,17 +1,26 @@
 const mongoose = require("mongoose");
 
 /**
- * Utilidades de conexión para las pruebas de integración.
+ * Utilidades de conexión para las pruebas que necesitan base de datos.
  *
- * Usan una base de datos APARTE (librestock_test) para no tocar los datos de desarrollo,
- * y exigen un replica set: las transacciones del kardex no funcionan sin él.
+ * Estrategia de aislamiento (Guía 2, Actividad 11): la suite corre contra un
+ * MongoDB efímero en memoria CON replica set, levantado una sola vez en
+ * tests/globalSetup.js. Ese servidor vive y muere con la ejecución, así que
+ * ninguna prueba puede tocar datos reales ni exige credenciales de Atlas.
+ *
+ * Definiendo MONGO_URI_TEST antes de ejecutar se puede apuntar a otra base
+ * —por ejemplo librestock_test en Atlas— sin cambiar una línea de las pruebas.
  */
 
-const TEST_URI =
-  process.env.MONGO_URI_TEST || "mongodb://localhost:27017/librestock_test?replicaSet=rs0";
+const DB_NAME = "librestock_test";
 
 const connect = async () => {
-  await mongoose.connect(TEST_URI);
+  const uri = process.env.MONGO_URI_TEST;
+  if (!uri) {
+    throw new Error("Falta MONGO_URI_TEST: ejecuta la suite con jest.integration.config.js");
+  }
+  await mongoose.connect(uri, { dbName: DB_NAME });
+
   // Salvaguarda: un error de configuración no debe vaciar la base de desarrollo
   const dbName = mongoose.connection.name;
   if (!dbName.endsWith("_test")) {
@@ -31,4 +40,4 @@ const disconnect = async () => {
   await mongoose.disconnect();
 };
 
-module.exports = { connect, clear, disconnect, TEST_URI };
+module.exports = { connect, clear, disconnect, DB_NAME };
