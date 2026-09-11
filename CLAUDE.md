@@ -34,7 +34,7 @@ npm install && npm run seed && npm run dev    # puerto 5001; admin/admin123, ros
 
 # Front-end (otra terminal)
 cd client && cp .env.example .env    # VITE_API_URL=http://localhost:5001
-npm install && npm run dev           # puerto 5173
+npm install && npm run dev           # puerto 5180 (vite.config.js, strictPort)
 
 # Calidad
 cd server && npm test && npm run lint
