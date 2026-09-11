@@ -1,4 +1,5 @@
 const Stock = require("../models/Stock");
+const ApiError = require("../utils/ApiError");
 const asyncHandler = require("../utils/asyncHandler");
 
 // RF-05 y RF-06 — consulta de existencias por ubicación con alertas de mínimo
@@ -22,6 +23,7 @@ const updateMinStock = asyncHandler(async (req, res) => {
     { minStock: req.body.minStock },
     { new: true, runValidators: true }
   ).populate("product location");
+  if (!stock) throw ApiError.notFound("Registro de existencias no encontrado");
   res.json(stock);
 });
 
