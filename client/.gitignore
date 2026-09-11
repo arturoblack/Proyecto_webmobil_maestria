@@ -2,3 +2,9 @@ node_modules/
 dist/
 .env
 .env.local
+
+# Cypress: evidencias generadas y credenciales locales
+cypress/videos/
+cypress/screenshots/
+cypress/downloads/
+cypress.env.json
