@@ -72,11 +72,11 @@ export default function Inventory() {
       </div>
 
       <ErrorAlert message={stocks.error || locations.error} />
-      {stocks.loading ? (
-        <Loader />
-      ) : rows.length === 0 ? (
+      {stocks.loading && <Loader />}
+      {!stocks.loading && rows.length === 0 && (
         <div className="glass p-4"><EmptyState>No hay existencias que coincidan con el filtro.</EmptyState></div>
-      ) : (
+      )}
+      {!stocks.loading && rows.length > 0 && (
         <div className="d-flex flex-column gap-2">
           {rows.map(({ product, stocks: productStocks }) => (
             <div key={product._id} className="glass p-3">

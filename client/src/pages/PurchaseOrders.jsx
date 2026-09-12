@@ -4,7 +4,7 @@ import { useApi } from "../hooks/useApi";
 import { Loader, ErrorAlert, EmptyState, Modal } from "../components/Ui";
 import { dateTime, ORDER_STATUS_LABELS } from "../utils/format";
 
-const EMPTY_FORM = { supplierName: "", destinationId: "", items: [{ productId: "", quantity: 1 }] };
+const EMPTY_FORM = { supplierName: "", destinationId: "", items: [{ key: "first", productId: "", quantity: 1 }] };
 
 // RF-11 y RF-12: pedidos a proveedor y recepción con entradas automáticas (solo administrador)
 export default function PurchaseOrders() {
@@ -26,7 +26,7 @@ export default function PurchaseOrders() {
     try {
       await api.post("/api/purchase-orders", {
         ...form,
-        items: form.items.filter((i) => i.productId).map((i) => ({ ...i, quantity: Number(i.quantity) })),
+        items: form.items.filter((i) => i.productId).map((i) => ({ productId: i.productId, quantity: Number(i.quantity) })),
       });
       setShowModal(false);
       setForm(EMPTY_FORM);
@@ -55,11 +55,11 @@ export default function PurchaseOrders() {
         <button className="btn btn-ink btn-sm px-3" onClick={() => setShowModal(true)}>+ Nuevo pedido</button>
       </div>
       <ErrorAlert message={error || orders.error} />
-      {orders.loading ? (
-        <Loader />
-      ) : orders.data.length === 0 ? (
+      {orders.loading && <Loader />}
+      {!orders.loading && orders.data.length === 0 && (
         <div className="glass p-4"><EmptyState>Aún no hay pedidos a proveedores.</EmptyState></div>
-      ) : (
+      )}
+      {!orders.loading && orders.data.length > 0 && (
         <div className="d-flex flex-column gap-2">
           {orders.data.map((o) => (
             <div key={o._id} className="glass p-3">
@@ -94,16 +94,16 @@ export default function PurchaseOrders() {
           footer={<button className="btn btn-ink w-100" onClick={submit} disabled={sending}>{sending ? "Guardando…" : "Crear pedido"}</button>}
         >
           <ErrorAlert message={error} />
-          <label className="form-label fw-bold small">Proveedor</label>
-          <input className="form-control mb-2" value={form.supplierName} onChange={(e) => setForm({ ...form, supplierName: e.target.value })} placeholder="p. ej. Distribuidora Tai Loy" />
-          <label className="form-label fw-bold small">Ubicación de destino</label>
-          <select className="form-select mb-2" value={form.destinationId} onChange={(e) => setForm({ ...form, destinationId: e.target.value })}>
+          <label className="form-label fw-bold small" htmlFor="po-proveedor">Proveedor</label>
+          <input id="po-proveedor" className="form-control mb-2" value={form.supplierName} onChange={(e) => setForm({ ...form, supplierName: e.target.value })} placeholder="p. ej. Distribuidora Tai Loy" />
+          <label className="form-label fw-bold small" htmlFor="po-ubicacion-de-destino">Ubicación de destino</label>
+          <select id="po-ubicacion-de-destino" className="form-select mb-2" value={form.destinationId} onChange={(e) => setForm({ ...form, destinationId: e.target.value })}>
             <option value="">Selecciona…</option>
             {locations.data?.map((l) => <option key={l._id} value={l._id}>{l.name}</option>)}
           </select>
-          <label className="form-label fw-bold small">Productos</label>
+          <span className="form-label fw-bold small d-block">Productos</span>
           {form.items.map((item, index) => (
-            <div key={index} className="d-flex gap-2 mb-2">
+            <div key={item.key} className="d-flex gap-2 mb-2">
               <select className="form-select" value={item.productId} onChange={(e) => setItem(index, { productId: e.target.value })}>
                 <option value="">Selecciona…</option>
                 {products.data?.map((p) => <option key={p._id} value={p._id}>{p.name}</option>)}
@@ -113,7 +113,7 @@ export default function PurchaseOrders() {
           ))}
           <button
             className="btn btn-sm btn-outline-secondary"
-            onClick={() => setForm((f) => ({ ...f, items: [...f.items, { productId: "", quantity: 1 }] }))}
+            onClick={() => setForm((f) => ({ ...f, items: [...f.items, { key: crypto.randomUUID(), productId: "", quantity: 1 }] }))}
           >
             + Agregar producto
           </button>

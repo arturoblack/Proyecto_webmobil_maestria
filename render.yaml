@@ -19,5 +19,8 @@ services:
       # Render genera un secreto fuerte y aleatorio: no hay que inventarlo ni versionarlo
       - key: JWT_SECRET
         generateValue: true
+      # URL pública del front en Vercel: única que el navegador puede usar contra la API
+      - key: CLIENT_ORIGIN
+        sync: false
       - key: NODE_VERSION
         value: "20"

@@ -42,23 +42,23 @@ export default function Login() {
         <div className="glass p-4">
           {error && <div className="alert alert-danger py-2">{error}</div>}
           <form onSubmit={handleSubmit}>
-            <label className="form-label fw-bold small">Usuario</label>
-            <input
+            <label className="form-label fw-bold small" htmlFor="login-usuario">Usuario</label>
+            <input id="login-usuario"
               className="form-control mb-3"
               value={form.username}
               onChange={(e) => setForm({ ...form, username: e.target.value })}
               autoFocus
               required
             />
-            <label className="form-label fw-bold small">Contraseña</label>
-            <input
+            <label className="form-label fw-bold small" htmlFor="login-contrasena">Contraseña</label>
+            <input id="login-contrasena"
               type="password"
               className="form-control mb-4"
               value={form.password}
               onChange={(e) => setForm({ ...form, password: e.target.value })}
               required
             />
-            <button className="btn btn-ink w-100" disabled={sending}>
+            <button type="submit" className="btn btn-ink w-100" disabled={sending}>
               {sending ? "Ingresando…" : "Ingresar"}
             </button>
           </form>

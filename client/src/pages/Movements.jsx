@@ -70,11 +70,11 @@ export default function Movements() {
       </div>
 
       <ErrorAlert message={movements.error} />
-      {movements.loading ? (
-        <Loader />
-      ) : movements.data.length === 0 ? (
+      {movements.loading && <Loader />}
+      {!movements.loading && movements.data.length === 0 && (
         <div className="glass p-4"><EmptyState>Aún no hay movimientos con este filtro.</EmptyState></div>
-      ) : (
+      )}
+      {!movements.loading && movements.data.length > 0 && (
         <div className="d-flex flex-column gap-2">
           {movements.data.map((m) => (
             <div key={m._id} className="glass p-3">
@@ -105,8 +105,8 @@ export default function Movements() {
           }
         >
           <ErrorAlert message={error} />
-          <label className="form-label fw-bold small">Tipo</label>
-          <select
+          <label className="form-label fw-bold small" htmlFor="mov-tipo">Tipo</label>
+          <select id="mov-tipo"
             className="form-select mb-2"
             value={form.type}
             onChange={(e) => setForm({ ...form, type: e.target.value, originId: "", destinationId: "" })}
@@ -115,15 +115,15 @@ export default function Movements() {
             <option value="salida">Salida (merma / ajuste)</option>
             <option value="transferencia">Transferencia entre sedes</option>
           </select>
-          <label className="form-label fw-bold small">Producto</label>
-          <select className="form-select mb-2" value={form.productId} onChange={(e) => setForm({ ...form, productId: e.target.value })}>
+          <label className="form-label fw-bold small" htmlFor="mov-producto">Producto</label>
+          <select id="mov-producto" className="form-select mb-2" value={form.productId} onChange={(e) => setForm({ ...form, productId: e.target.value })}>
             <option value="">Selecciona…</option>
             {products.data?.map((p) => <option key={p._id} value={p._id}>{p.name}</option>)}
           </select>
           {needsOrigin && (
             <>
-              <label className="form-label fw-bold small">Origen</label>
-              <select className="form-select mb-2" value={form.originId} onChange={(e) => setForm({ ...form, originId: e.target.value })}>
+              <label className="form-label fw-bold small" htmlFor="mov-origen">Origen</label>
+              <select id="mov-origen" className="form-select mb-2" value={form.originId} onChange={(e) => setForm({ ...form, originId: e.target.value })}>
                 <option value="">Selecciona…</option>
                 {locations.data?.map((l) => <option key={l._id} value={l._id}>{l.name}</option>)}
               </select>
@@ -131,8 +131,8 @@ export default function Movements() {
           )}
           {needsDestination && (
             <>
-              <label className="form-label fw-bold small">Destino</label>
-              <select className="form-select mb-2" value={form.destinationId} onChange={(e) => setForm({ ...form, destinationId: e.target.value })}>
+              <label className="form-label fw-bold small" htmlFor="mov-destino">Destino</label>
+              <select id="mov-destino" className="form-select mb-2" value={form.destinationId} onChange={(e) => setForm({ ...form, destinationId: e.target.value })}>
                 <option value="">Selecciona…</option>
                 {locations.data?.map((l) => <option key={l._id} value={l._id}>{l.name}</option>)}
               </select>
@@ -140,12 +140,12 @@ export default function Movements() {
           )}
           <div className="row g-2">
             <div className="col-4">
-              <label className="form-label fw-bold small">Cantidad</label>
-              <input type="number" min="1" className="form-control" value={form.quantity} onChange={(e) => setForm({ ...form, quantity: e.target.value })} />
+              <label className="form-label fw-bold small" htmlFor="mov-cantidad">Cantidad</label>
+              <input id="mov-cantidad" type="number" min="1" className="form-control" value={form.quantity} onChange={(e) => setForm({ ...form, quantity: e.target.value })} />
             </div>
             <div className="col-8">
-              <label className="form-label fw-bold small">Motivo</label>
-              <input className="form-control" value={form.reason} onChange={(e) => setForm({ ...form, reason: e.target.value })} placeholder="p. ej. envase dañado" />
+              <label className="form-label fw-bold small" htmlFor="mov-motivo">Motivo</label>
+              <input id="mov-motivo" className="form-control" value={form.reason} onChange={(e) => setForm({ ...form, reason: e.target.value })} placeholder="p. ej. envase dañado" />
             </div>
           </div>
         </Modal>

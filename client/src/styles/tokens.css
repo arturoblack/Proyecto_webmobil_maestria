@@ -64,8 +64,8 @@ h1, h2, h3, .ls-display { font-family: var(--ls-font-display); letter-spacing: -
 .btn-ink:hover, .btn-ink:focus { background: var(--ls-ink-dark); border-color: var(--ls-ink-dark); color: #fff; }
 .btn-amber { background: var(--ls-amber); border-color: var(--ls-amber); color: #fff; font-weight: 700; min-height: 44px; }
 
-.badge-soft-amber { background: rgba(245, 158, 11, 0.16); color: #8a5a00; font-weight: 700; }
-.badge-soft-green { background: rgba(25, 135, 84, 0.14); color: #0e5c38; font-weight: 700; }
+.badge-soft-amber { background: #fdefdb; color: #8a5a00; font-weight: 700; } /* 5.2:1 */
+.badge-soft-green { background: #e3f3ea; color: #0e5c38; font-weight: 700; } /* 7.0:1 */
 .text-muted-2 { color: var(--ls-text-2); }
 
 /* Navegación inferior (móvil) */

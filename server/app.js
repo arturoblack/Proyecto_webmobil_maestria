@@ -13,8 +13,15 @@ const errorHandler = require("./middlewares/errorHandler");
  */
 const app = express();
 
+// No anunciar Express ni su versión a quien explore la API
+app.disable("x-powered-by");
+
+// Solo los orígenes declarados pueden llamar a la API desde un navegador.
+// CLIENT_ORIGIN admite varios separados por coma (p. ej. Vercel + local).
+const allowedOrigins = (process.env.CLIENT_ORIGIN || "http://localhost:5180").split(",").map((o) => o.trim());
+
 app.use(express.json());
-app.use(cors());
+app.use(cors({ origin: allowedOrigins }));
 
 app.use("/api/auth", require("./routes/auth"));
 app.use("/api/users", require("./routes/users"));

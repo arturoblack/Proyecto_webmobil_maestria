@@ -44,11 +44,11 @@ export default function Locations() {
         <button className="btn btn-ink btn-sm px-3" onClick={() => setShowModal(true)}>+ Nueva ubicación</button>
       </div>
       <ErrorAlert message={error || locations.error} />
-      {locations.loading ? (
-        <Loader />
-      ) : locations.data.length === 0 ? (
+      {locations.loading && <Loader />}
+      {!locations.loading && locations.data.length === 0 && (
         <div className="glass p-4"><EmptyState>Registra tu primer almacén o tienda.</EmptyState></div>
-      ) : (
+      )}
+      {!locations.loading && locations.data.length > 0 && (
         <div className="row g-2">
           {locations.data.map((l) => (
             <div key={l._id} className="col-12 col-md-6 col-lg-4">
@@ -71,10 +71,10 @@ export default function Locations() {
           footer={<button className="btn btn-ink w-100" onClick={submit} disabled={sending}>{sending ? "Guardando…" : "Crear ubicación"}</button>}
         >
           <ErrorAlert message={error} />
-          <label className="form-label fw-bold small">Nombre</label>
-          <input className="form-control mb-2" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} placeholder="p. ej. Tienda Jr. Lima" />
-          <label className="form-label fw-bold small">Tipo</label>
-          <select className="form-select" value={form.type} onChange={(e) => setForm({ ...form, type: e.target.value })}>
+          <label className="form-label fw-bold small" htmlFor="loc-nombre">Nombre</label>
+          <input id="loc-nombre" className="form-control mb-2" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} placeholder="p. ej. Tienda Jr. Lima" />
+          <label className="form-label fw-bold small" htmlFor="loc-tipo">Tipo</label>
+          <select id="loc-tipo" className="form-select" value={form.type} onChange={(e) => setForm({ ...form, type: e.target.value })}>
             <option value="tienda">Tienda (punto de venta)</option>
             <option value="almacen">Almacén (solo guarda mercadería)</option>
           </select>

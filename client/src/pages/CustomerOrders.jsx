@@ -4,7 +4,7 @@ import { useApi } from "../hooks/useApi";
 import { Loader, ErrorAlert, EmptyState, Modal } from "../components/Ui";
 import { dateTime, ORDER_STATUS_LABELS } from "../utils/format";
 
-const EMPTY_FORM = { customerName: "", phone: "", locationId: "", notes: "", items: [{ productId: "", quantity: 1 }] };
+const EMPTY_FORM = { customerName: "", phone: "", locationId: "", notes: "", items: [{ key: "first", productId: "", quantity: 1 }] };
 
 // RF-10: encargos de clientes; su registro no afecta el stock
 export default function CustomerOrders() {
@@ -30,7 +30,7 @@ export default function CustomerOrders() {
     try {
       await api.post("/api/customer-orders", {
         ...form,
-        items: form.items.filter((i) => i.productId).map((i) => ({ ...i, quantity: Number(i.quantity) })),
+        items: form.items.filter((i) => i.productId).map((i) => ({ productId: i.productId, quantity: Number(i.quantity) })),
       });
       setShowModal(false);
       setForm(EMPTY_FORM);
@@ -69,11 +69,11 @@ export default function CustomerOrders() {
         ))}
       </div>
       <ErrorAlert message={error || orders.error} />
-      {orders.loading ? (
-        <Loader />
-      ) : orders.data.length === 0 ? (
+      {orders.loading && <Loader />}
+      {!orders.loading && orders.data.length === 0 && (
         <div className="glass p-4"><EmptyState>No hay pedidos con este estado.</EmptyState></div>
-      ) : (
+      )}
+      {!orders.loading && orders.data.length > 0 && (
         <div className="d-flex flex-column gap-2">
           {orders.data.map((o) => (
             <div key={o._id} className="glass p-3">
@@ -109,22 +109,22 @@ export default function CustomerOrders() {
           <ErrorAlert message={error} />
           <div className="row g-2 mb-2">
             <div className="col-7">
-              <label className="form-label fw-bold small">Cliente</label>
-              <input className="form-control" value={form.customerName} onChange={(e) => setForm({ ...form, customerName: e.target.value })} />
+              <label className="form-label fw-bold small" htmlFor="co-cliente">Cliente</label>
+              <input id="co-cliente" className="form-control" value={form.customerName} onChange={(e) => setForm({ ...form, customerName: e.target.value })} />
             </div>
             <div className="col-5">
-              <label className="form-label fw-bold small">Teléfono</label>
-              <input className="form-control" value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })} />
+              <label className="form-label fw-bold small" htmlFor="co-telefono">Teléfono</label>
+              <input id="co-telefono" className="form-control" value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })} />
             </div>
           </div>
-          <label className="form-label fw-bold small">Tienda que atiende</label>
-          <select className="form-select mb-2" value={form.locationId} onChange={(e) => setForm({ ...form, locationId: e.target.value })}>
+          <label className="form-label fw-bold small" htmlFor="co-tienda-que-atiende">Tienda que atiende</label>
+          <select id="co-tienda-que-atiende" className="form-select mb-2" value={form.locationId} onChange={(e) => setForm({ ...form, locationId: e.target.value })}>
             <option value="">Selecciona…</option>
             {locations.data?.filter((l) => l.type === "tienda").map((l) => <option key={l._id} value={l._id}>{l.name}</option>)}
           </select>
-          <label className="form-label fw-bold small">Productos</label>
+          <span className="form-label fw-bold small d-block">Productos</span>
           {form.items.map((item, index) => (
-            <div key={index} className="d-flex gap-2 mb-2">
+            <div key={item.key} className="d-flex gap-2 mb-2">
               <select className="form-select" value={item.productId} onChange={(e) => setItem(index, { productId: e.target.value })}>
                 <option value="">Selecciona…</option>
                 {products.data?.map((p) => <option key={p._id} value={p._id}>{p.name}</option>)}
@@ -134,12 +134,12 @@ export default function CustomerOrders() {
           ))}
           <button
             className="btn btn-sm btn-outline-secondary mb-2"
-            onClick={() => setForm((f) => ({ ...f, items: [...f.items, { productId: "", quantity: 1 }] }))}
+            onClick={() => setForm((f) => ({ ...f, items: [...f.items, { key: crypto.randomUUID(), productId: "", quantity: 1 }] }))}
           >
             + Agregar producto
           </button>
-          <label className="form-label fw-bold small">Notas</label>
-          <input className="form-control" value={form.notes} onChange={(e) => setForm({ ...form, notes: e.target.value })} placeholder="p. ej. recoge el viernes" />
+          <label className="form-label fw-bold small" htmlFor="co-notas">Notas</label>
+          <input id="co-notas" className="form-control" value={form.notes} onChange={(e) => setForm({ ...form, notes: e.target.value })} placeholder="p. ej. recoge el viernes" />
         </Modal>
       )}
     </>

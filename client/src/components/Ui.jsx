@@ -3,7 +3,7 @@
 export function Loader() {
   return (
     <div className="text-center py-5">
-      <div className="spinner-border" style={{ color: "var(--ls-ink)" }} role="status" />
+      <output className="spinner-border" style={{ color: "var(--ls-ink)" }} />
       <p className="text-muted-2 mt-2 mb-0">Cargando…</p>
     </div>
   );
@@ -34,8 +34,16 @@ export function StatCard({ label, value, detail, highlight = false, tone }) {
 
 export function Modal({ title, onClose, children, footer }) {
   return (
-    <div className="modal d-block" style={{ background: "rgba(21, 42, 70, 0.45)" }} onClick={onClose}>
-      <div className="modal-dialog modal-dialog-centered" onClick={(e) => e.stopPropagation()}>
+    <div className="modal d-block">
+      {/* El fondo es un botón real: se cierra con clic, con Enter y con lector de pantalla */}
+      <button
+        type="button"
+        className="position-absolute top-0 start-0 w-100 h-100 border-0 p-0"
+        style={{ background: "rgba(21, 42, 70, 0.45)" }}
+        aria-label="Cerrar"
+        onClick={onClose}
+      />
+      <div className="modal-dialog modal-dialog-centered">
         <div className="modal-content glass border-0">
           <div className="modal-header border-0 pb-0">
             <h5 className="modal-title ls-display">{title}</h5>

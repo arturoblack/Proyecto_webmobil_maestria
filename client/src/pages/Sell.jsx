@@ -36,7 +36,7 @@ export default function Sell() {
 
   const addToCart = (stockRow) => {
     setCart((prev) => {
-      const found = prev.find((i) => i.product._id === stockRow.product._id);
+      const found = prev.some((i) => i.product._id === stockRow.product._id);
       if (found) {
         return prev.map((i) =>
           i.product._id === stockRow.product._id
@@ -178,8 +178,8 @@ export default function Sell() {
             {method === "efectivo" && (
               <div className="row g-2 mb-3">
                 <div className="col-6">
-                  <label className="form-label fw-bold small mb-1">PAGA CON</label>
-                  <input
+                  <label className="form-label fw-bold small mb-1" htmlFor="sell-paga-con">PAGA CON</label>
+                  <input id="sell-paga-con"
                     type="number"
                     min="0"
                     step="0.10"
@@ -189,7 +189,7 @@ export default function Sell() {
                   />
                 </div>
                 <div className="col-6">
-                  <label className="form-label fw-bold small mb-1">VUELTO</label>
+                  <span className="form-label fw-bold small mb-1 d-block">VUELTO</span>
                   <div className="ls-display fw-bold fs-4" style={{ color: change >= 0 ? "var(--ls-green)" : "var(--ls-red)" }}>
                     {money(Math.max(change, 0))}
                   </div>

@@ -48,11 +48,11 @@ export default function Users() {
         <button className="btn btn-ink btn-sm px-3" onClick={() => setShowModal(true)}>+ Nuevo usuario</button>
       </div>
       <ErrorAlert message={error || users.error} />
-      {users.loading ? (
-        <Loader />
-      ) : users.data.length === 0 ? (
+      {users.loading && <Loader />}
+      {!users.loading && users.data.length === 0 && (
         <div className="glass p-4"><EmptyState>No hay usuarios registrados.</EmptyState></div>
-      ) : (
+      )}
+      {!users.loading && users.data.length > 0 && (
         <div className="glass p-3">
           {users.data.map((u) => (
             <div key={u._id} className="d-flex justify-content-between align-items-center py-2 border-bottom">
@@ -86,20 +86,20 @@ export default function Users() {
           footer={<button className="btn btn-ink w-100" onClick={submit} disabled={sending}>{sending ? "Creando…" : "Crear usuario"}</button>}
         >
           <ErrorAlert message={error} />
-          <label className="form-label fw-bold small">Nombre completo</label>
-          <input className="form-control mb-2" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} />
+          <label className="form-label fw-bold small" htmlFor="usr-nombre-completo">Nombre completo</label>
+          <input id="usr-nombre-completo" className="form-control mb-2" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} />
           <div className="row g-2 mb-2">
             <div className="col-6">
-              <label className="form-label fw-bold small">Usuario</label>
-              <input className="form-control" value={form.username} onChange={(e) => setForm({ ...form, username: e.target.value })} />
+              <label className="form-label fw-bold small" htmlFor="usr-usuario">Usuario</label>
+              <input id="usr-usuario" className="form-control" value={form.username} onChange={(e) => setForm({ ...form, username: e.target.value })} />
             </div>
             <div className="col-6">
-              <label className="form-label fw-bold small">Contraseña</label>
-              <input type="password" className="form-control" value={form.password} onChange={(e) => setForm({ ...form, password: e.target.value })} />
+              <label className="form-label fw-bold small" htmlFor="usr-contrasena">Contraseña</label>
+              <input id="usr-contrasena" type="password" className="form-control" value={form.password} onChange={(e) => setForm({ ...form, password: e.target.value })} />
             </div>
           </div>
-          <label className="form-label fw-bold small">Rol</label>
-          <select className="form-select" value={form.role} onChange={(e) => setForm({ ...form, role: e.target.value })}>
+          <label className="form-label fw-bold small" htmlFor="usr-rol">Rol</label>
+          <select id="usr-rol" className="form-select" value={form.role} onChange={(e) => setForm({ ...form, role: e.target.value })}>
             <option value="vendedor">Vendedor</option>
             <option value="admin">Administrador</option>
           </select>

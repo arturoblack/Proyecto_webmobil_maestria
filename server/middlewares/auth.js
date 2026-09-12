@@ -4,7 +4,7 @@ const ApiError = require("../utils/ApiError");
 // Verifica el token JWT de la cabecera Authorization y expone req.user
 const verifyToken = (req, res, next) => {
   const header = req.headers.authorization;
-  if (!header || !header.startsWith("Bearer ")) {
+  if (!header?.startsWith("Bearer ")) {
     return next(ApiError.unauthorized("Acceso denegado: falta el token"));
   }
   try {

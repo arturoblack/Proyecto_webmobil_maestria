@@ -54,11 +54,11 @@ export default function Products() {
       </div>
       <input className="form-control mb-3" placeholder="Buscar por nombre o SKU…" value={search} onChange={(e) => setSearch(e.target.value)} />
       <ErrorAlert message={error || products.error} />
-      {products.loading ? (
-        <Loader />
-      ) : products.data.length === 0 ? (
+      {products.loading && <Loader />}
+      {!products.loading && products.data.length === 0 && (
         <div className="glass p-4"><EmptyState>No hay productos en el catálogo.</EmptyState></div>
-      ) : (
+      )}
+      {!products.loading && products.data.length > 0 && (
         <div className="glass p-3">
           <div className="table-responsive">
             <table className="table align-middle mb-0">
@@ -95,24 +95,24 @@ export default function Products() {
           footer={<button className="btn btn-ink w-100" onClick={submit} disabled={sending}>{sending ? "Guardando…" : "Guardar"}</button>}
         >
           <ErrorAlert message={error} />
-          <label className="form-label fw-bold small">Nombre</label>
-          <input className="form-control mb-2" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} />
+          <label className="form-label fw-bold small" htmlFor="prod-nombre">Nombre</label>
+          <input id="prod-nombre" className="form-control mb-2" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} />
           <div className="row g-2 mb-2">
             <div className="col-6">
-              <label className="form-label fw-bold small">SKU</label>
-              <input className="form-control" value={form.sku} disabled={editing !== "new"} onChange={(e) => setForm({ ...form, sku: e.target.value })} />
+              <label className="form-label fw-bold small" htmlFor="prod-sku">SKU</label>
+              <input id="prod-sku" className="form-control" value={form.sku} disabled={editing !== "new"} onChange={(e) => setForm({ ...form, sku: e.target.value })} />
             </div>
             <div className="col-6">
-              <label className="form-label fw-bold small">Precio (S/)</label>
-              <input type="number" min="0" step="0.10" className="form-control" value={form.price} onChange={(e) => setForm({ ...form, price: e.target.value })} />
+              <label className="form-label fw-bold small" htmlFor="prod-precio-s">Precio (S/)</label>
+              <input id="prod-precio-s" type="number" min="0" step="0.10" className="form-control" value={form.price} onChange={(e) => setForm({ ...form, price: e.target.value })} />
             </div>
           </div>
-          <label className="form-label fw-bold small">Categoría</label>
-          <select className="form-select mb-2" value={form.category} onChange={(e) => setForm({ ...form, category: e.target.value })}>
+          <label className="form-label fw-bold small" htmlFor="prod-categoria">Categoría</label>
+          <select id="prod-categoria" className="form-select mb-2" value={form.category} onChange={(e) => setForm({ ...form, category: e.target.value })}>
             {CATEGORIES.map((c) => <option key={c}>{c}</option>)}
           </select>
-          <label className="form-label fw-bold small">Descripción</label>
-          <input className="form-control" value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} />
+          <label className="form-label fw-bold small" htmlFor="prod-descripcion">Descripción</label>
+          <input id="prod-descripcion" className="form-control" value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} />
           <p className="text-muted-2 mt-2 mb-0" style={{ fontSize: "0.76rem" }}>
             Las existencias no se editan aquí: usa Movimientos para entradas, salidas o transferencias.
           </p>

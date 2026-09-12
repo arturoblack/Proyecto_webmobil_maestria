@@ -24,12 +24,11 @@ export default function OfflineNotice() {
   if (!offline) return null;
 
   return (
-    <div
+    <output
       className="position-fixed top-0 start-0 end-0 text-white text-center py-2 px-3 small fw-bold"
       style={{ background: "var(--ls-red)", zIndex: 1080 }}
-      role="status"
     >
       Sin conexión — LibreStock necesita internet para consultar stock y registrar ventas.
-    </div>
+    </output>
   );
 }
