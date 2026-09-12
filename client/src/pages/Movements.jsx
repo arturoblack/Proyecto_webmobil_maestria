@@ -71,10 +71,10 @@ export default function Movements() {
 
       <ErrorAlert message={movements.error} />
       {movements.loading && <Loader />}
-      {!movements.loading && movements.data.length === 0 && (
+      {!movements.loading && movements.data?.length === 0 && (
         <div className="glass p-4"><EmptyState>Aún no hay movimientos con este filtro.</EmptyState></div>
       )}
-      {!movements.loading && movements.data.length > 0 && (
+      {!movements.loading && movements.data?.length > 0 && (
         <div className="d-flex flex-column gap-2">
           {movements.data.map((m) => (
             <div key={m._id} className="glass p-3">

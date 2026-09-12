@@ -45,10 +45,10 @@ export default function Locations() {
       </div>
       <ErrorAlert message={error || locations.error} />
       {locations.loading && <Loader />}
-      {!locations.loading && locations.data.length === 0 && (
+      {!locations.loading && locations.data?.length === 0 && (
         <div className="glass p-4"><EmptyState>Registra tu primer almacén o tienda.</EmptyState></div>
       )}
-      {!locations.loading && locations.data.length > 0 && (
+      {!locations.loading && locations.data?.length > 0 && (
         <div className="row g-2">
           {locations.data.map((l) => (
             <div key={l._id} className="col-12 col-md-6 col-lg-4">

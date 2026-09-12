@@ -49,10 +49,10 @@ export default function Users() {
       </div>
       <ErrorAlert message={error || users.error} />
       {users.loading && <Loader />}
-      {!users.loading && users.data.length === 0 && (
+      {!users.loading && users.data?.length === 0 && (
         <div className="glass p-4"><EmptyState>No hay usuarios registrados.</EmptyState></div>
       )}
-      {!users.loading && users.data.length > 0 && (
+      {!users.loading && users.data?.length > 0 && (
         <div className="glass p-3">
           {users.data.map((u) => (
             <div key={u._id} className="d-flex justify-content-between align-items-center py-2 border-bottom">

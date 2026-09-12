@@ -70,10 +70,10 @@ export default function CustomerOrders() {
       </div>
       <ErrorAlert message={error || orders.error} />
       {orders.loading && <Loader />}
-      {!orders.loading && orders.data.length === 0 && (
+      {!orders.loading && orders.data?.length === 0 && (
         <div className="glass p-4"><EmptyState>No hay pedidos con este estado.</EmptyState></div>
       )}
-      {!orders.loading && orders.data.length > 0 && (
+      {!orders.loading && orders.data?.length > 0 && (
         <div className="d-flex flex-column gap-2">
           {orders.data.map((o) => (
             <div key={o._id} className="glass p-3">

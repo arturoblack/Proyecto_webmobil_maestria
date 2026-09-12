@@ -55,10 +55,10 @@ export default function Products() {
       <input className="form-control mb-3" placeholder="Buscar por nombre o SKU…" value={search} onChange={(e) => setSearch(e.target.value)} />
       <ErrorAlert message={error || products.error} />
       {products.loading && <Loader />}
-      {!products.loading && products.data.length === 0 && (
+      {!products.loading && products.data?.length === 0 && (
         <div className="glass p-4"><EmptyState>No hay productos en el catálogo.</EmptyState></div>
       )}
-      {!products.loading && products.data.length > 0 && (
+      {!products.loading && products.data?.length > 0 && (
         <div className="glass p-3">
           <div className="table-responsive">
             <table className="table align-middle mb-0">
