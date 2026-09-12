@@ -1,7 +1,11 @@
-const { defineConfig } = require("cypress");
+import { defineConfig } from "cypress";
 
 /**
- * Configuración mínima para la primera suite End-to-End (Guía 3, Actividad 3).
+ * Configuración de la suite End-to-End (Guía 3, Actividad 3).
+ *
+ * El archivo usa sintaxis de módulos ES y no CommonJS: client/package.json
+ * declara "type": "module", de modo que un require() aquí hace que Cypress ni
+ * siquiera llegue a arrancar.
  *
  * baseUrl apunta al puerto 5180, que es el que declara vite.config.js con
  * strictPort, y no al 5173 por defecto de Vite: la documentación del proyecto
@@ -11,7 +15,7 @@ const { defineConfig } = require("cypress");
  * o de variables CYPRESS_*, para que ningún archivo versionado contenga una
  * contraseña, aunque sea la del seed de demostración.
  */
-module.exports = defineConfig({
+export default defineConfig({
   e2e: {
     baseUrl: "http://localhost:5180",
     supportFile: "cypress/support/e2e.js",
