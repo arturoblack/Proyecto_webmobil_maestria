@@ -3,6 +3,7 @@ const Sale = require("../models/Sale");
 const Product = require("../models/Product");
 const Location = require("../models/Location");
 const ApiError = require("../utils/ApiError");
+const { toCents, fromCents } = require("../utils/money");
 const { applyMovement } = require("./inventoryService");
 
 // Regla pura del pago simulado: en efectivo se exige monto suficiente y se calcula el vuelto
@@ -15,10 +16,8 @@ const computePayment = (method, total, paidWith) => {
   if (!Number.isFinite(paid) || paid < total) {
     throw ApiError.badRequest("El monto pagado no puede ser menor al total de la venta");
   }
-  // El vuelto se calcula en céntimos enteros. Antes de redondear se descarta el ruido binario
-  // (20 - 12.345 deja 765.4999999999999 céntimos), o el medio céntimo exacto bajaría
-  const changeCents = Math.round(Number(((paid - total) * 100).toFixed(6)));
-  return { method, paidWith: paid, change: changeCents / 100 };
+  // El vuelto se calcula en céntimos enteros para que el medio céntimo exacto suba
+  return { method, paidWith: paid, change: fromCents(toCents(paid - total)) };
 };
 
 /**
