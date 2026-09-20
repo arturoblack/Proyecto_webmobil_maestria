@@ -62,10 +62,43 @@ describe("computePayment — aritmética de céntimos", () => {
     expect(pago.change.toFixed(2)).toBe("7.66");
   });
 
-  // Nota para el informe: el medio céntimo exacto (por ejemplo un vuelto de 7.655)
-  // se redondea HACIA ABAJO y no hacia arriba, porque 7.655 * 100 vale
-  // 765.4999999999999 en coma flotante. Queda documentado como defecto y se
-  // corrige en el ciclo TDD de las actividades 14 a 16.
+  test("el medio céntimo exacto del vuelto se redondea hacia arriba (DEF-002)", () => {
+    // Arrange: el vuelto exacto es 7.655, pero 20 - 12.345 da 7.654999999999999
+    // y, por cien, 765.4999999999999: Math.round lo deja en 765 céntimos
+    const total = 12.345;
+
+    // Act
+    const pago = computePayment("efectivo", total, 20);
+
+    // Assert: en caja el medio céntimo sube, no se pierde por el camino
+    expect(pago.change).toBe(7.66);
+    expect(pago.change.toFixed(2)).toBe("7.66");
+  });
+
+  // Fronteras del mismo defecto: el vuelto exacto termina en medio céntimo, pero en coma
+  // flotante sus céntimos quedan por debajo (766.4999999999999, 999.4999999999999 y
+  // 8191.499999999999) y Math.round los baja
+  test.each([
+    ["tecleado con tres decimales sobre un total ya normalizado", 12.34, "20.005", 7.67],
+    ["cuyo acarreo llega hasta la unidad", 0.005, 10, 10],
+    ["con un billete grande, donde el error binario crece", 18.085, 100, 81.92],
+  ])("sube el medio céntimo %s (DEF-002)", (_caso, total, entregado, vuelto) => {
+    expect(computePayment("efectivo", total, entregado).change).toBe(vuelto);
+  });
+
+  // Protección contra regresiones: corregir el medio céntimo no puede convertirse en un
+  // redondeo siempre hacia arriba ni romper los importes sin representación binaria exacta
+  // (10 - 8.995 da 1.0050000000000008, 20 - 19.99 da 0.010000000000001563 y
+  // 3.3 - 1.1 da 2.1999999999999997)
+  test.each([
+    ["una diezmilésima por debajo del medio céntimo, que baja", 12.3451, 20, 7.65],
+    ["una diezmilésima por encima del medio céntimo, que sube", 12.3449, 20, 7.66],
+    ["un medio céntimo cuyo error binario ya caía hacia arriba", 8.995, 10, 1.01],
+    ["una resta con cola binaria por exceso", 19.99, 20, 0.01],
+    ["una resta con cola binaria por defecto", 1.1, 3.3, 2.2],
+  ])("conserva el redondeo de %s", (_caso, total, entregado, vuelto) => {
+    expect(computePayment("efectivo", total, entregado).change).toBe(vuelto);
+  });
 
   test("no produce vuelto negativo en ningún caso admitido", () => {
     // Arrange: recorrido de importes válidos
